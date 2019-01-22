@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzlx.web.api.dao.TbStrategyDao">
+
+    <sql id="strategyColumns">
+        a.id,
+        a.title,
+        a.image,
+        a.day,
+        if(a.official=0,false,true) official,
+        a.describes,
+        a.content,
+        d.id as "author.id",
+        d.name as "author.name",
+        a.price,
+        a.area_id as areaId,
+        a.created,
+        a.praisenum,
+        a.collectnum,
+        if(a.collectnum>0,true,false) isCollected,
+        if(a.praisenum>0,true,false) isPraised,
+        a.clicknum,
+        if(a.hot=0,false,true) hot,
+        c.id as "tag.id",
+        c.name as "tag.name"
+    </sql>
+
+    <!--删除攻略-->
+    <delete id="delete">
+        delete from
+          tb_strategy
+        where
+          id = #{strategy_id}
+    </delete>
+
+    <!--查询攻略-->
+    <resultMap type="TbStrategyDTO" id="tbStrategyDTOList">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="image" property="image"/>
+        <result column="day" property="day"/>
+        <result column="official" property="official"/>
+        <result column="describes" property="describes"/>
+        <result column="content" property="content"/>
+        <result column="price" property="price"/>
+        <result column="areaId" property="areaId"/>
+        <result column="created" property="created"/>
+        <result column="praisenum" property="praisenum"/>
+        <result column="collectnum" property="collectnum"/>
+        <result column="isCollected" property="isCollected"/>
+        <result column="isPraised" property="isPraised"/>
+        <result column="clicknum" property="clicknum"/>
+        <result column="hot" property="hot"/>
+        <!--一对一的关系这样写-->
+        <association property="author" javaType="TbUserDTO">
+            <id column="author.id" property="id"/>
+            <result column="author.name" property="username"/>
+            <result column="author.follow" property="follow"/>
+        </association>
+        <!--一对多的关系这样写-->
+        <collection property="tag" ofType="TbTaglib">
+            <id column="tag.id" property="id"/>
+            <result column="tag.name" property="name"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="selectById" resultMap="tbStrategyDTOList" >
+        select
+          <include refid="strategyColumns"/>
+          ,if(f.id is null,false,true) "author.follow"
+        from
+          tb_strategy as a
+        left join tb_tag b on a.id = b.type_id
+        left join tb_taglib c on b.target_id = c.id
+        left join tb_user d on d.id = a.author
+        <if test="login_user_id != null and login_user_id !='' ">
+          left join
+            ( select * from tb_user_follow f_t
+               where f_t.follower_id like concat('%',#{login_user_id},'%')
+            ) f
+            on d.id= f.ed_follower_id
+        </if>
+        where
+          a.id = #{strategy_id}
+
+    </select>
+
+
+    <select id="count" resultType="java.lang.Integer">
+      select count(*) from
+        tb_strategy as a
+        <where>
+            <if test="author_id != null and author_id !='' ">
+                and a.author like concat('%',#{author_id},'%')
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectPageByCondition" resultMap="tbStrategyDTOList">
+        select
+        <include refid="strategyColumns"/>
+        ,null "author.follow"
+        from
+        tb_strategy as a
+        left join tb_tag b on a.id = b.type_id
+        left join tb_taglib c on b.target_id = c.id
+        left join tb_user d on d.id = a.author
+        <where>
+            <if test="author_id != null and author_id !='' ">
+                and a.author like concat('%',#{author_id},'%')
+            </if>
+            <if test="area_id != null and area_id !='' ">
+                and a.area_id like concat('%',#{area_id},'%')
+            </if>
+            <if test="taglib_id != null and taglib_id !='' ">
+                and b.taglib_id like concat('%',#{taglib_id},'%')
+            </if>
+        </where>
+         limit #{offset},#{pageSize}
+
+    </select>
+
+
+    <insert id="insert" >
+        insert into tb_strategy
+        (
+            title,
+            image,
+            day,
+            describes,
+            content,
+            author,
+            price,
+            area_id
+
+        )
+        values(
+          #{title},
+          #{image},
+          #{day},
+          #{describes},
+          #{content},
+          #{author},
+          #{price},
+          #{areaId}
+        )
+    </insert>
+
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzlx.web.api.dao.SearchDao">
+
+    <select id="searchHotel" resultType="TbHotelDTO">
+        SELECT
+        a.id,
+        a.name,
+        a.score,
+        a.englishname,
+        a.hotel_type_id AS hotelTypeId,
+        a.level,
+        b.image
+        FROM tb_hotel AS a LEFT JOIN tb_hotel_image AS b ON a.id=b.hotel_id
+        WHERE a.name LIKE CONCAT ('%',#{content},'%')
+        ORDER BY hot DESC, score DESC ,level DESC
+    </select>
+
+    <select id="searchStrategy" resultType="SearchStrategyDTO">
+        SELECT
+        a.id,
+        a.title,
+        a.official,
+        a.content,
+        a.created,
+        a.clicknum,
+        a.praisenum,
+        a.collectnum,
+        a.hot,
+        a.image,
+        b.id AS "author.id",
+        b.name AS "author.name"
+        FROM tb_strategy AS a LEFT JOIN tb_user AS b ON a.author=b.id
+        WHERE a.title LIKE CONCAT ('%',#{content},'%')
+    </select>
+
+
+    <select id="searchScenicSpot" resultType="TbScenicSpot">
+        SELECT
+        a.id,
+        a.name,
+        a.area_id AS areaId,
+        a.addr,
+        a.hot,
+        a.describle,
+        a.level,
+        a.image
+        FROM tb_scenic_spot AS a
+        WHERE a.name LIKE CONCAT ('%',#{content},'%')
+    </select>
+
+    <select id="searchTbTagsByStrategy" resultType="TbTaglib">
+        SELECT
+        a.id,
+        a.name
+        FROM tb_taglib AS a LEFT JOIN tb_tag AS b ON a.id = b.taglib_id
+        WHERE b.type_id = 2 AND b.target_id = #{targetId}
+    </select>
+
+</mapper>
