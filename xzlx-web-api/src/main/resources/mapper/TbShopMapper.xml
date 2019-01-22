@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzlx.web.api.dao.TbShopDAO">
+
+<select id="selectParentById" resultType="ShopDTO">
+    SELECT
+      id,
+      name,
+      `describe`,
+      image,
+      addr,
+      area_id,
+      level
+    FROM
+      tb_shop
+    WHERE
+      area_id=#{id} AND parent_id=0
+    LIMIT #{start},#{length}
+</select>
+
+    <select id="selectParentByIdCount" resultType="java.lang.Integer">
+    SELECT
+      COUNT(1)
+    FROM
+      tb_shop
+    WHERE
+      area_id=#{id} AND parent_id=0
+</select>
+    <select id="selectByParentId" resultType="Shop">
+    SELECT
+       id,
+      name,
+      `describe`,
+      image,
+      addr,
+      area_id,
+      level
+    FROM
+      tb_shop
+    WHERE
+      parent_id=#{id}
+</select>
+
+    <select id="selectById" resultType="Shop">
+    SELECT
+       id,
+      name,
+      `describe`,
+      image,
+      addr,
+      area_id,
+      level
+    FROM
+      tb_shop
+    WHERE
+      id=#{id}
+</select>
+</mapper>
