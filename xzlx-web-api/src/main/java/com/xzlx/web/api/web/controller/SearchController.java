@@ -3,6 +3,7 @@ package com.xzlx.web.api.web.controller;
 import com.xzlx.commons.util.dto.BaseResult;
 import com.xzlx.web.api.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date: 2019/1/22 9:19
  * @Version 1.0
  */
+@CrossOrigin
 @RestController
 @RequestMapping("api")
 public class SearchController {

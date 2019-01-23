@@ -3,16 +3,14 @@ package com.xzlx.web.api.web.controller;
 import com.xzlx.commons.util.dto.BaseResult;
 import com.xzlx.web.api.service.TbHotalService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author: you are really cool!!
  * @Date: 2019/1/18 14:43
  * @Version 1.0
  */
+@CrossOrigin
 @RestController
 @RequestMapping("api/hotels")
 public class TbHotalController {

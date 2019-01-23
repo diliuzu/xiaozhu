@@ -8,15 +8,12 @@ import com.xzlx.web.api.service.TbStrategyService;
 import com.xzlx.web.api.web.dto.TbStrategyDTO;
 import com.xzlx.web.api.web.dto.TbUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
-
+@CrossOrigin
 @RestController
 @RequestMapping(value = "api/v1/strategies")
 public class TbStrategyController {

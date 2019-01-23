@@ -19,8 +19,6 @@ public class TbStrategyDTO {
 
     private Boolean official;
 
-
-
     private BigDecimal price;
 
     private Integer areaId;
@@ -40,8 +38,8 @@ public class TbStrategyDTO {
     private String content;
 
     private Boolean isPraised;
-    private Boolean isCollected;
 
+    private Boolean isCollected;
 
     private List<TbTaglib> tag;
 
