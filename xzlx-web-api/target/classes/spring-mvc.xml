@@ -19,6 +19,8 @@
     <!-- 默认的注解映射的支持 -->
     <mvc:annotation-driven />
 
+    <mvc:resources mapping="/static/**" location="/static/" cache-period="31536000"/>
+
     <!--<mvc:interceptors>-->
         <!--<mvc:interceptor>-->
             <!--<mvc:mapping path="/**"/>-->
@@ -26,5 +28,5 @@
         <!--</mvc:interceptor>-->
 
     <!--</mvc:interceptors>-->
-
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 </beans>

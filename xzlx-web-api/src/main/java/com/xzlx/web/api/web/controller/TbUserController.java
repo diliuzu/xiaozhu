@@ -84,8 +84,6 @@ public class TbUserController {
     @GetMapping("collect/travels/{travel_id}")
     public BaseResult travels(@PathVariable(value = "travel_id") Integer travelId,HttpServletRequest request){
         TbUser user= (TbUser) request.getSession().getAttribute("user");
-        user=new TbUser();
-        user.setId(2);
         if(user==null)
             return BaseResult.fail(401,"该操作需要登录");
         else {
@@ -97,8 +95,6 @@ public class TbUserController {
     @GetMapping("collect/strategies/{strategy_id}")
     public BaseResult strategies(@PathVariable(value = "strategy_id") Integer strategyId,HttpServletRequest request){
         TbUser user= (TbUser) request.getSession().getAttribute("user");
-        user=new TbUser();
-        user.setId(2);
         if(user==null)
             return BaseResult.fail(401,"该操作需要登录");
         else {
@@ -110,8 +106,6 @@ public class TbUserController {
     @GetMapping("praise/travels/{travel_id}")
     public BaseResult praiseTravels(@PathVariable(value = "travel_id") Integer travelId,HttpServletRequest request){
         TbUser user= (TbUser) request.getSession().getAttribute("user");
-        user=new TbUser();
-        user.setId(2);
         if(user==null)
             return BaseResult.fail(401,"该操作需要登录");
         else {
@@ -123,8 +117,6 @@ public class TbUserController {
     @GetMapping("praise/strategies/{strategy_id}")
     public BaseResult praiseStrategies(@PathVariable(value = "strategy_id") Integer strategyId,HttpServletRequest request){
         TbUser user= (TbUser) request.getSession().getAttribute("user");
-        user=new TbUser();
-        user.setId(2);
         if(user==null)
             return BaseResult.fail(401,"该操作需要登录");
         else {
