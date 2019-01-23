@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzlx.web.api.dao.TbPraiseDao">
+
+    <select id="selectByUids" resultType="TbPraise" parameterType="java.util.Map">
+        SELECT
+            id,
+            user_id,
+            type_id,
+            target_id
+	    FROM
+	      tb_praise
+	    WHERE
+	      user_id=#{uid}
+	      AND
+	      type_id=1
+	      AND
+	      target_id IN
+		<foreach collection="tbTravels" item="tbTravel" open="(" separator="," close=")">
+			#{tbTravel.id}
+		</foreach>
+    </select>
+	<select id="selectByUid" resultType="TbPraise" parameterType="java.util.Map">
+		SELECT
+		id,
+		user_id,
+		type_id,
+		target_id
+		FROM
+		tb_praise
+		WHERE
+		user_id=#{tbUser.id}
+		AND
+		type_id=1
+		AND
+		target_id=#{tbTravel.id}
+	</select>
+
+</mapper>

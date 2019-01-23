@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzlx.web.api.dao.TbLineDAO">
+    <select id="selectStrategyId" resultType="TbLineDTO">
+        SELECT
+          a.id,
+          a.describe
+        FROM
+          tb_strategy as a
+        WHERE
+          area_id=#{id}
+        LIMIT #{start},#{length}
+    </select>
+    <select id="selectStrategyIdCount" resultType="java.lang.Integer">
+        SELECT
+          COUNT(1)
+        FROM
+          tb_strategy as a
+        WHERE
+          area_id=#{id}
+    </select>
+    <select id="selectLines" resultType="Line">
+        SELECT
+         b.name as "strategyName",
+         a.sort,
+         a.scenic_spot_id,
+         b.image as "image"
+         FROM tb_line AS a
+         LEFT JOIN tb_scenic_spot AS b ON a.scenic_spot_id=b.id
+        WHERE
+        a.strategy_id=#{id}
+
+    </select>
+
+</mapper>

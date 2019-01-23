@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzlx.web.api.dao.TbUserFollowDao">
+    <sql id="selectContent">
+     a.id,
+     a.follow_id,
+     a.ed_follow_id
+    </sql>
+
+    <select id="personalshowfollow" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM tb_user_follow  AS a
+        WHERE  a.follower_id=#{id}
+    </select>
+
+    <select id="followershow" resultType="java.lang.Integer">
+        SELECT  COUNT(*) FROM tb_user_follow AS a
+        WHERE a.ed_follower_id=#{id}
+    </select>
+
+    <select id="select" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM tb_user_follow
+        WHERE
+        follower_id=#{id} AND ed_follower_id=#{edId}
+    </select>
+
+    <insert id="addFollow">
+
+  INSERT INTO tb_user_follow
+	(
+	follower_id,
+	ed_follower_id
+	)
+	VALUES
+	(
+      #{id},
+      #{edId}
+	)
+    </insert>
+
+    <delete id="removeFollow">
+  DELETE FROM tb_user_follow
+	WHERE
+	follower_id=#{id} AND ed_follower_id=#{edId}
+    </delete>
+</mapper>

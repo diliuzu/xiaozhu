@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzlx.web.api.dao.TbUserDao">
+    <sql id="selectContent">
+          a.id,
+          a.name,
+          a.password,
+          a.nickname,
+          a.sex,
+          a.phone,
+          a.email,
+          a.photo,
+          a.friends,
+          a.level,
+          a.vip,
+          a.signature
+    </sql>
+
+    <select id="selectall" resultType="TbUser">
+        SELECT <include refid="selectContent"></include>
+        FROM tb_user
+    </select>
+
+    <select id="login" resultType="TbUser">
+        SELECT
+        <include refid="selectContent"></include>
+        FROM
+        tb_user AS a
+        WHERE   email =#{name}
+    </select>
+
+    <insert id="register">
+        INSERT INTO tb_user (
+          NAME,
+          EMAIL,
+          PASSWORD,
+          SEX,
+          NICKNAME,
+          FRIENDS,
+          LEVEL,
+          vip,
+          photo
+        )
+        VALUES
+          (
+        #{name},
+        #{email},
+        #{password},
+        #{sex},
+        #{nickname},
+        #{friends},
+        #{level},
+        #{vip},
+        #{photo}
+          )
+    </insert>
+
+    <select id="personal" resultType="TbUser">
+    SELECT
+    <include refid="selectContent"></include>
+    FROM tb_user AS a
+    WHERE
+     id =#{id}
+</select>
+
+    <update id="resetpassword">
+      UPDATE
+      tb_user
+        SET
+        PASSWORD = #{password}
+        WHERE id = #{id}
+
+    </update>
+
+    <update id="edit">
+        UPDATE
+        tb_user
+        SET
+        PHOTO=#{photo},
+        NICKNAME=#{nickname},
+        SEX=#{sex},
+        signature=#{signature}
+        WHERE id =#{id}
+    </update>
+<select id="mycollection" resultType="TbCollection" parameterType="java.util.Map" >
+    SELECT  target_id
+    FROM  tb_collection
+    WHERE  user_id=#{id} AND type_id=#{typeid}
+
+</select>
+
+    <select id="selectCollect" resultType="java.lang.Integer">
+
+SELECT 	COUNT(1)
+	FROM
+	tb_collection
+	WHERE
+	user_id=#{userId} AND type_id=#{typeId} AND target_id=#{targetId}
+    </select>
+
+    <select id="selectPraise" resultType="java.lang.Integer">
+
+SELECT 	COUNT(1)
+	FROM
+	tb_praise
+	WHERE
+	user_id=#{userId} AND type_id=#{typeId} AND target_id=#{targetId}
+    </select>
+
+    <insert id="addCollect">
+
+INSERT INTO tb_collection
+	(
+	user_id,
+	type_id,
+	target_id
+	)
+	VALUES
+	(
+	#{userId},
+	#{typeId},
+	#{targetId}
+	)
+    </insert>
+    <delete id="deleteCollect">
+
+DELETE FROM tb_collection
+	WHERE
+	user_id = #{userId} AND type_id=#{typeId} AND target_id=#{targetId}
+
+    </delete>
+
+
+
+
+    <update id="upCollectCount">
+
+UPDATE ${table}
+	SET
+        <if test="typeId==1">
+            collectnum = collectnum+1
+        </if>
+        <if test="typeId==2">
+            praisenum=praisenum+1
+        </if>
+
+
+	WHERE
+	id = #{id}
+
+    </update>
+    <update id="downCollectCount">
+
+UPDATE ${table}
+	SET
+	<if test="typeId==1">
+        collectnum = collectnum-1
+    </if>
+    <if test="typeId==2">
+        praisenum=praisenum-1
+    </if>
+
+
+	WHERE
+	id = #{id}
+
+    </update>
+
+
+
+    <insert id="addPraise">
+
+INSERT INTO tb_praise
+	(
+	user_id,
+	type_id,
+	target_id
+	)
+	VALUES
+	(
+	#{userId},
+	#{typeId},
+	#{targetId}
+	)
+    </insert>
+    <delete id="deletePraise">
+
+DELETE FROM tb_praise
+	WHERE
+	user_id = #{userId} AND type_id=#{typeId} AND target_id=#{targetId}
+    </delete>
+
+
+    <select id="selectByUids" resultType="TbUser">
+        SELECT
+        id,
+        `name`
+        FROM
+        tb_user
+        where
+        id IN
+        <foreach collection="list" item="tbTravel" open="(" separator="," close=")">
+            #{tbTravel.author}
+        </foreach>
+    </select>
+    <select id="selectByUid" resultType="UserInfoDTO">
+        SELECT
+        id,
+        `name`
+        <if test="tbUser != null and tbUser != ''">
+            ,
+            (SELECT
+            COUNT(1)
+            FROM tb_user_follow
+            WHERE ed_follower_id = #{tbTravel.author}
+            AND follower_id = #{tbUser.id}) AS follow
+        </if>
+        FROM tb_user
+        WHERE id = #{tbTravel.author}
+    </select>
+</mapper>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzlx.web.api.dao.TbTravelDao">
+    <sql id="selectContent">
+        a.id,
+        a.title,
+        a.image,
+        a.official,
+        a.describe,
+        a.content,
+        a.author,
+        a.area_id AS areaId,
+        a.created,
+        a.updated,
+        a.collectnum,
+        a.praisenum,
+        a.clicknum,
+        a.hot
+    </sql>
+
+    <select id="selectById" resultType="TbTravel">
+        SELECT
+        <include refid="selectContent"></include>
+        FROM
+          tb_travel AS a
+        WHERE
+          a.id = #{id}
+    </select>
+    <delete id="deleteById">
+        DELETE
+        FROM
+          tb_travel
+        WHERE
+          id = #{id}
+    </delete>
+    <insert id="insert">
+        INSERT INTO tb_travel
+        (
+            title,
+            image,
+            official,
+            `describe`,
+            content,
+            author,
+            area_id,
+            created,
+            updated,
+            collectnum,
+            praisenum,
+            clicknum,
+            hot
+        )
+        VALUES(
+            #{title},
+            #{image},
+            #{official},
+            #{describe},
+            #{content},
+            #{author},
+            #{areaId},
+            #{created},
+            #{updated},
+            #{collectnum},
+            #{praisenum},
+            #{clicknum},
+            #{hot}
+        );
+    </insert>
+    <update id="update">
+        UPDATE
+          tb_travel AS a
+        SET
+            a.title = #{title},
+            a.image = #{image},
+            a.describe = #{describe},
+            a.content = #{content},
+            a.updated = #{updated}
+	    WHERE
+	        a.id = #{id}
+    </update>
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM tb_travel as a
+        <where>
+            <if test="author != null and author != ''">
+                AND a.author LIKE CONCAT ('%',#{author},'%')
+            </if>
+            <if test="areaId != null and areaId != ''">
+                AND a.area_id LIKE CONCAT ('%',#{areaId},'%')
+            </if>
+            <if test="official != null and official != ''">
+                AND a.official LIKE CONCAT ('%',#{official},'%')
+            </if>
+        </where>
+
+    </select>
+    <select id="selectByPage" resultType="TbTravel" parameterType="java.util.Map">
+        SELECT
+        <include refid="selectContent"/>
+        FROM
+        tb_travel AS a
+        <where>
+            <if test="tbTravel.author != null and tbTravel.author != ''">
+                AND a.author LIKE CONCAT ('%',#{tbTravel.author},'%')
+            </if>
+            <if test="tbTravel.areaId != null and tbTravel.areaId != ''">
+                AND a.area_id LIKE CONCAT ('%',#{tbTravel.areaId},'%')
+            </if>
+            <if test="tbTravel.official != null and tbTravel.official != ''">
+                AND a.official LIKE CONCAT ('%',#{tbTravel.official},'%')
+            </if>
+        </where>
+        LIMIT #{start},#{length}
+    </select>
+
+    <select id="selectByTag" resultType="TbTravel" parameterType="java.util.Map">
+        SELECT
+        <include refid="selectContent"></include>
+        FROM tb_travel AS a
+        <if test="tbTags!= null and tbTags.size()>0">
+            WHERE a.id IN
+            <foreach collection="tbTags" item="tbTag" open="(" separator="," close=")">
+                #{tbTag.targetId}
+            </foreach>
+        </if>
+        LIMIT #{start},#{length}
+    </select>
+
+</mapper>

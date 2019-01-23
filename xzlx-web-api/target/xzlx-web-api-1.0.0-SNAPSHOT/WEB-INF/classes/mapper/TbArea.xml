@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzlx.web.api.dao.TbAreaDao">
+
+    <sql id="selectContent">
+        id,
+        parent_id AS parentId,
+        `name`,
+        country
+    </sql>
+    <select id="selectByPage" resultType="TbArea">
+      SELECT
+        <include refid="selectContent"></include>
+      FROM
+          tb_area
+      WHERE
+        parent_id = #{parentId}
+      LIMIT 0,#{length}
+    </select>
+
+    <select id="selectAll" resultType="TbArea">
+        SELECT
+          <include refid="selectContent"></include>
+        FROM
+          tb_area
+        WHERE
+          parent_id = #{parentId}
+    </select>
+
+</mapper>

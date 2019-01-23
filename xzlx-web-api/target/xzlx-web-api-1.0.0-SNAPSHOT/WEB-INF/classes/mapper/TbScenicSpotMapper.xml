@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzlx.web.api.dao.TbScenicSpotDao">
+
+    <sql id="selectContent">
+        a.id,
+        a.name,
+        a.area_id AS areaId,
+        a.addr,
+        a.level,
+        a.image,
+        a.hot,
+        a.describe
+    </sql>
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM tb_scenic_spot as a
+        WHERE
+         a.area_id = #{areaId}
+    </select>
+
+    <select id="pageByAreaId" resultType="TbScenicSpot" parameterType="java.util.Map">
+        SELECT
+        <include refid="selectContent"></include>
+        FROM tb_scenic_spot AS a
+        WHERE
+        a.area_id = #{areaId}
+        LIMIT #{start},#{length}
+    </select>
+
+    <!--添加景点-->
+    <insert id="add">
+      INSERT INTO tb_scenic_spot
+        (
+        `name`,
+        area_id,
+        `level`,
+        price,
+        hot
+        )
+        VALUES
+        (
+        #{name},
+        #{areaId},
+        #{level},
+        #{price},
+        #{hot}
+        )
+    </insert>
+
+</mapper>
